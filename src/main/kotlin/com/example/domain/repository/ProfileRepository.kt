@@ -6,6 +6,8 @@ interface ProfileRepository {
 
     suspend fun createProfile(profileDTO: ProfileDTO)
     suspend fun fetchProfile(login:String):ProfileDTO
+    suspend fun fetchProfiles():List<ProfileDTO>
+    suspend fun editProfile(profileDTO: ProfileDTO)
 
 
 }

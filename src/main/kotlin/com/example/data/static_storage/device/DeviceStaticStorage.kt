@@ -31,7 +31,7 @@ class DeviceStaticStorage {
             icon = ""
         ),
         DeviceStatic(
-            id = "4",
+            id = "5",
             name = "Fan",
             icon = "Smart Light 2"
         ),

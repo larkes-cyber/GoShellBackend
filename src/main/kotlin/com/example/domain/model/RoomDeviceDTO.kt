@@ -1,7 +1,9 @@
 package com.example.domain.model
 
+import kotlinx.serialization.Serializable
 import java.util.UUID
 
+@Serializable
 data class RoomDeviceDTO(
     val id:String? = null,
     val typeId:String,

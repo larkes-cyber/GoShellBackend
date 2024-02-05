@@ -76,6 +76,17 @@ fun Application.configureDeviceRouting(){
                 call.respond(HttpStatusCode.OK)
             }
 
+            post("/getHome"){
+                val request = call.receive<TokenDTO>()
+                val checkingTokenResult = authRepository.checkToken(request)
+                if(checkingTokenResult is Resource.Error){
+                    call.respondText(text = checkingTokenResult.message!!)
+                    return@post
+                }
+                call.respond(DevicesResponse(deviceRepository.fetchHomeDevices(request.login)))
+
+            }
+
         }
 
     }

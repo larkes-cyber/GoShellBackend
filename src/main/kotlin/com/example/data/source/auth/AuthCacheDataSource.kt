@@ -13,4 +13,6 @@ class AuthCacheDataSource(
 
     fun fetchToken(login:String):List<TokenEntity> = cache.getCache().filter { it.login == login }
 
+    fun fetchTokens() = cache.getCache()
+
 }

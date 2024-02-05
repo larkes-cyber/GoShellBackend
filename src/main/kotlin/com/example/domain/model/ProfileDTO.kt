@@ -8,5 +8,5 @@ data class ProfileDTO(
     val id:String = UUID.randomUUID().toString(),
     val name:String,
     val login:String,
-    val password:String
+    var password:String
 )

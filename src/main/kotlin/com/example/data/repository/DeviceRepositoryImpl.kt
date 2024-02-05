@@ -58,7 +58,9 @@ class DeviceRepositoryImpl(
         val homeDevices = mutableListOf<HomeDevicesDTO>()
 
         roomDevices.forEach {
-            typeDevices[it.typeId]?.add(it)
+            val tmp = typeDevices[it.typeId] ?: mutableListOf()
+            tmp.add(it)
+            typeDevices[it.typeId] = tmp
         }
 
         typeDevices.forEach {pair ->
@@ -73,7 +75,7 @@ class DeviceRepositoryImpl(
                 typeId = pair.key,
                 name = name,
                 active = active,
-                inactive = active
+                inactive = inactive
             ))
         }
 

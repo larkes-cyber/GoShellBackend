@@ -17,27 +17,29 @@ fun Application.configureAuthRouting(){
     val authRepository by inject<AuthRepository>()
 
     routing() {
-        post("/auth/login"){
-            val request = call.receive<AuthRequest>()
-            val token = authRepository.performLogin(login = request.login, password = request.password)
-            if(token is Resource.Success){
-                call.respond(token.data!!)
-                return@post
+        route("/auth"){
+            post("/login"){
+                val request = call.receive<AuthRequest>()
+                val token = authRepository.performLogin(login = request.login, password = request.password)
+                if(token is Resource.Success){
+                    call.respond(token.data!!)
+                    return@post
+                }
+                call.respondText(text = token.message!!, status = HttpStatusCode.NotAcceptable)
             }
-            call.respondText(text = token.message!!, status = HttpStatusCode.NotAcceptable)
-        }
-        post("/auth/registration"){
-            val request = call.receive<RegRequest>()
-            val token = authRepository.performRegistration(ProfileDTO(
-                name = request.name,
-                password = request.password,
-                login = request.login
-            ))
-            if(token is Resource.Success){
-                call.respond(token.data!!)
-                return@post
+            post("/registration"){
+                val request = call.receive<RegRequest>()
+                val token = authRepository.performRegistration(ProfileDTO(
+                    name = request.name,
+                    password = request.password,
+                    login = request.login
+                ))
+                if(token is Resource.Success){
+                    call.respond(token.data!!)
+                    return@post
+                }
+                call.respondText(text = token.message!!, status = HttpStatusCode.NotAcceptable)
             }
-            call.respondText(text = token.message!!, status = HttpStatusCode.NotAcceptable)
         }
     }
 

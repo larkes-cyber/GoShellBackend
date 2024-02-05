@@ -1,13 +1,14 @@
 package com.example.domain.repository
 
 import com.auth0.jwt.JWT
+import com.auth0.jwt.RegisteredClaims.ISSUER
+import com.auth0.jwt.RegisteredClaims.SUBJECT
 import com.auth0.jwt.algorithms.Algorithm
 import com.example.domain.model.ProfileDTO
 import com.example.domain.model.TokenDTO
 import com.example.utils.Resource
 import io.ktor.util.*
-import sun.security.x509.X509CertInfo.ISSUER
-import sun.security.x509.X509CertInfo.SUBJECT
+
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 

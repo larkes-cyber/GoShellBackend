@@ -4,6 +4,7 @@ import com.example.data.cache.TokenCacheStorage
 import com.example.data.cache.TokenCacheStorageFactory
 import com.example.data.repository.AuthRepositoryImpl
 import com.example.data.repository.DeviceRepositoryImpl
+import com.example.data.repository.ProfileRepositoryImpl
 import com.example.data.repository.RoomRepositoryImpl
 import com.example.data.source.auth.AuthCacheDataSource
 import com.example.data.source.device.DeviceDatabaseDataSource
@@ -17,10 +18,19 @@ import com.example.data.static_storage.room.RoomStaticStorage
 import com.example.data.static_storage.room.RoomStaticStorageFactory
 import com.example.domain.repository.AuthRepository
 import com.example.domain.repository.DeviceRepository
+import com.example.domain.repository.ProfileRepository
 import com.example.domain.repository.RoomRepository
 import org.koin.dsl.module
+import org.litote.kmongo.coroutine.coroutine
+import org.litote.kmongo.reactivestreams.KMongo
 
 val appModule = module {
+
+    single {
+        KMongo.createClient()
+            .coroutine
+            .getDatabase("go_shell_db")
+    }
 
     single<DeviceStaticStorage> { DeviceStaticStorageFactory.makeStorage() }
     single<RoomStaticStorage> { RoomStaticStorageFactory.makeStaticStorage() }
@@ -34,7 +44,7 @@ val appModule = module {
 
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
     single<DeviceRepository> { DeviceRepositoryImpl(get(), get()) }
-    single<RoomRepository> { RoomRepositoryImpl(get(), get()) }
+    single<ProfileRepository> { ProfileRepositoryImpl(get()) }
     single<RoomRepository> { RoomRepositoryImpl(get(), get()) }
 
 }

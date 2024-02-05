@@ -1,5 +1,7 @@
 package com.example.data.static_storage.device
 
 object DeviceStaticStorageFactory {
-    fun makeStorage() = DeviceStaticStorage()
+
+    private val instance = DeviceStaticStorageImpl()
+    fun makeStorage():DeviceStaticStorage = instance
 }

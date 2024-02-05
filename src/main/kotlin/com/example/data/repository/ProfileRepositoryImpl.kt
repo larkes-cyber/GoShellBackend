@@ -2,7 +2,8 @@ package com.example.data.repository
 
 import com.example.data.repository.mapper.toProfileDTO
 import com.example.data.repository.mapper.toProfileEntity
-import com.example.data.source.profile.ProfileDatabaseDataSource
+import com.example.data.source.profile.database.ProfileDatabaseDataSource
+import com.example.data.source.profile.database.ProfileDatabaseDataSourceImpl
 import com.example.domain.model.ProfileDTO
 import com.example.domain.repository.ProfileRepository
 

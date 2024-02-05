@@ -1,9 +1,7 @@
 package com.example.data.static_storage.room
 
-class RoomStaticStorage {
+interface RoomStaticStorage {
 
-    private val photos = listOf(
-        ""
-    )
-    fun fetchPhotos() = photos
+    fun fetchPhotos():List<String>
+
 }

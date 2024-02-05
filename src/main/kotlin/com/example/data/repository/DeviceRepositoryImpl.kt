@@ -2,15 +2,13 @@ package com.example.data.repository
 
 import com.example.data.repository.mapper.toDeviceDTO
 import com.example.data.repository.mapper.toRoomDeviceEntity
-import com.example.data.source.device.DeviceDatabaseDataSource
-import com.example.data.source.device.DeviceStaticStorageDataSource
+import com.example.data.source.device.database.DeviceDatabaseDataSource
 import com.example.data.source.device.model.RoomDeviceEntity
+import com.example.data.source.device.storage.DeviceStaticStorageDataSource
 import com.example.domain.model.DeviceDTO
 import com.example.domain.model.HomeDevicesDTO
 import com.example.domain.model.RoomDeviceDTO
-import com.example.domain.repository.AuthRepository
 import com.example.domain.repository.DeviceRepository
-import org.litote.kmongo.out
 
 class DeviceRepositoryImpl(
     private val deviceDatabaseDataSource: DeviceDatabaseDataSource,

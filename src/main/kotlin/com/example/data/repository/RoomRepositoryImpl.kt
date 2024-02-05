@@ -2,8 +2,10 @@ package com.example.data.repository
 
 import com.example.data.repository.mapper.toRoomDTO
 import com.example.data.repository.mapper.toRoomEntity
-import com.example.data.source.room.RoomDatabaseDataSource
-import com.example.data.source.room.RoomStaticStorageDataSource
+import com.example.data.source.room.database.RoomDatabaseDataSource
+import com.example.data.source.room.database.RoomDatabaseDataSourceImpl
+import com.example.data.source.room.storage.RoomStaticStorageDataSource
+import com.example.data.source.room.storage.RoomStaticStorageDataSourceImpl
 import com.example.domain.model.RoomDTO
 import com.example.domain.repository.RoomRepository
 

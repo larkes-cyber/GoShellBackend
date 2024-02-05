@@ -1,22 +1,20 @@
-package com.example.data.source.room
+package com.example.data.source.room.database
 
 import com.example.data.source.room.model.RoomEntity
 import com.mongodb.client.model.Filters
 import org.litote.kmongo.coroutine.CoroutineDatabase
-import org.litote.kmongo.coroutine.insertOne
-import java.util.logging.Filter
 
-class RoomDatabaseDataSource(
+class RoomDatabaseDataSourceImpl(
     private val coroutineDatabase: CoroutineDatabase
-) {
+):RoomDatabaseDataSource {
 
     private val db = coroutineDatabase.getCollection<RoomEntity>()
 
-    suspend fun insertRoom(roomEntity: RoomEntity){
+    override suspend fun insertRoom(roomEntity: RoomEntity){
         db.insertOne(roomEntity)
     }
 
-    suspend fun fetchRooms(login:String):List<RoomEntity>{
+    override suspend fun fetchRooms(login:String):List<RoomEntity>{
         val filter = Filters.eq("login", login)
         return db.find(filter).toList()
     }

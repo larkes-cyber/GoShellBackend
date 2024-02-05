@@ -6,12 +6,18 @@ import com.example.data.repository.AuthRepositoryImpl
 import com.example.data.repository.DeviceRepositoryImpl
 import com.example.data.repository.ProfileRepositoryImpl
 import com.example.data.repository.RoomRepositoryImpl
-import com.example.data.source.auth.AuthCacheDataSource
-import com.example.data.source.device.DeviceDatabaseDataSource
-import com.example.data.source.device.DeviceStaticStorageDataSource
-import com.example.data.source.profile.ProfileDatabaseDataSource
-import com.example.data.source.room.RoomDatabaseDataSource
-import com.example.data.source.room.RoomStaticStorageDataSource
+import com.example.data.source.auth.cache.AuthCacheDataSource
+import com.example.data.source.auth.cache.AuthCacheDataSourceImpl
+import com.example.data.source.device.database.DeviceDatabaseDataSource
+import com.example.data.source.device.database.DeviceDatabaseDataSourceImpl
+import com.example.data.source.device.storage.DeviceStaticStorageDataSource
+import com.example.data.source.device.storage.DeviceStaticStorageDataSourceImpl
+import com.example.data.source.profile.database.ProfileDatabaseDataSource
+import com.example.data.source.profile.database.ProfileDatabaseDataSourceImpl
+import com.example.data.source.room.database.RoomDatabaseDataSource
+import com.example.data.source.room.database.RoomDatabaseDataSourceImpl
+import com.example.data.source.room.storage.RoomStaticStorageDataSource
+import com.example.data.source.room.storage.RoomStaticStorageDataSourceImpl
 import com.example.data.static_storage.device.DeviceStaticStorage
 import com.example.data.static_storage.device.DeviceStaticStorageFactory
 import com.example.data.static_storage.room.RoomStaticStorage
@@ -32,15 +38,15 @@ val appModule = module {
             .getDatabase("go_shell_db")
     }
 
-    single<DeviceStaticStorage> { DeviceStaticStorageFactory.makeStorage() }
+    single { DeviceStaticStorageFactory.makeStorage() }
     single<RoomStaticStorage> { RoomStaticStorageFactory.makeStaticStorage() }
-    single<TokenCacheStorage> { TokenCacheStorageFactory.makeStorage() }
-    single<AuthCacheDataSource> { AuthCacheDataSource(get()) }
-    single<DeviceDatabaseDataSource> { DeviceDatabaseDataSource(get()) }
-    single<DeviceStaticStorageDataSource> { DeviceStaticStorageDataSource(get()) }
-    single<ProfileDatabaseDataSource> { ProfileDatabaseDataSource(get()) }
-    single<RoomDatabaseDataSource> { RoomDatabaseDataSource(get()) }
-    single<RoomStaticStorageDataSource> { RoomStaticStorageDataSource(get()) }
+    single { TokenCacheStorageFactory.makeStorage() }
+    single<AuthCacheDataSource> { AuthCacheDataSourceImpl(get()) }
+    single<DeviceDatabaseDataSource> { DeviceDatabaseDataSourceImpl(get()) }
+    single<DeviceStaticStorageDataSource> { DeviceStaticStorageDataSourceImpl(get()) }
+    single<ProfileDatabaseDataSource> { ProfileDatabaseDataSourceImpl(get()) }
+    single<RoomDatabaseDataSource> { RoomDatabaseDataSourceImpl(get()) }
+    single<RoomStaticStorageDataSource> { RoomStaticStorageDataSourceImpl(get()) }
 
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
     single<DeviceRepository> { DeviceRepositoryImpl(get(), get()) }

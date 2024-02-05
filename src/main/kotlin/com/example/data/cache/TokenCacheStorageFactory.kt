@@ -1,5 +1,7 @@
 package com.example.data.cache
 
 object TokenCacheStorageFactory {
-    fun makeStorage() = TokenCacheStorage()
+
+    private val instance = TokenCacheStorageImpl()
+    fun makeStorage():TokenCacheStorage = instance
 }

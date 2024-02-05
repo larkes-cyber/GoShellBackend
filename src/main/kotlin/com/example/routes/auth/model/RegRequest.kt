@@ -1,5 +1,6 @@
 package com.example.routes.auth.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

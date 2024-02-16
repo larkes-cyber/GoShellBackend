@@ -20,12 +20,14 @@ fun Application.configureAuthRouting(){
         route("/auth"){
             post("/login"){
                 val request = call.receive<AuthRequest>()
+                println("authCacheDataSource.fetchTokens()"+ "  #############")
+
                 val token = authRepository.performLogin(login = request.login, password = request.password)
                 if(token is Resource.Success){
                     call.respond(token.data!!)
                     return@post
                 }
-                call.respondText(text = token.message!!, status = HttpStatusCode.NotAcceptable)
+                call.respondText(text = token.message!!, status = HttpStatusCode.NotFound)
             }
             post("/registration"){
                 val request = call.receive<RegRequest>()

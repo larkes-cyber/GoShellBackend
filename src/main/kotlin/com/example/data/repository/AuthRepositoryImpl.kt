@@ -30,7 +30,7 @@ class AuthRepositoryImpl(
 
     override suspend fun performLogin(login: String, password: String): Resource<TokenDTO> {
         if(authCacheDataSource.fetchTokens().isEmpty()) pumpTokens()
-
+        println(authCacheDataSource.fetchTokens() + "  #############")
         val tokens = authCacheDataSource.fetchToken(login)
         val passCrypt = AuthRepository.generatePasswordHash(password)
         if(tokens.isEmpty()) return Resource.Error("User doesn't exist")
@@ -43,6 +43,7 @@ class AuthRepositoryImpl(
 
     override suspend fun performRegistration(profileDTO:ProfileDTO): Resource<TokenDTO> {
 
+        if(profileDTO.login.isEmpty() || profileDTO.password.isEmpty() || profileDTO.name.isEmpty()) return Resource.Error("Empty fields")
         val tokens = authCacheDataSource.fetchToken(profileDTO.login)
         if(tokens.isNotEmpty()) return Resource.Error("User is already exists")
 

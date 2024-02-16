@@ -8,33 +8,28 @@ class DeviceStaticStorageImpl:DeviceStaticStorage {
         DeviceStatic(
             id = "0",
             name = "Smart TV",
-            icon = ""
+            icon = "http://10.0.33.119:8080/device/icon?name=smart_tv"
         ),
         DeviceStatic(
             id = "1",
             name = "Air Conditioner",
-            icon = ""
+            icon = "http://10.0.33.119:8080/device/icon?name=air_conditioner"
         ),
         DeviceStatic(
             id = "2",
             name = "Air Purifier",
-            icon = ""
+            icon = "http://10.0.33.119:8080/device/icon?name=air_purifier"
         ),
         DeviceStatic(
             id = "3",
             name = "Smart Light 1",
-            icon = ""
+            icon = "http://10.0.33.119:8080/device/icon?name=smart_light"
         ),
         DeviceStatic(
             id = "4",
             name = "Fan",
-            icon = ""
-        ),
-        DeviceStatic(
-            id = "5",
-            name = "Fan",
-            icon = "Smart Light 2"
-        ),
+            icon = "http://10.0.33.119:8080/device/icon?name=fan"
+        )
     )
 
     override fun fetchDevices() = storage

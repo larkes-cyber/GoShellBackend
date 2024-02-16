@@ -36,6 +36,10 @@ class DeviceDatabaseDataSourceImpl(
         db.insertOne(roomDeviceEntity)
     }
 
+    override suspend fun fetchUserDevices(login: String): List<RoomDeviceEntity> {
+        val filter = Filters.eq("login", login)
+        return db.find(filter).toList()
+    }
 
 
 }

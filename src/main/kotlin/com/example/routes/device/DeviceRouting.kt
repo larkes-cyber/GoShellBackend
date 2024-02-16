@@ -15,6 +15,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
+import java.io.File
 
 fun Application.configureDeviceRouting(){
 
@@ -34,7 +35,7 @@ fun Application.configureDeviceRouting(){
                     return@post
                 }
 
-                call.respond(DevicesResponse(deviceRepository.fetchDevices()))
+                call.respond(deviceRepository.fetchDevices())
             }
 
             post("/getRoom") {
@@ -76,15 +77,33 @@ fun Application.configureDeviceRouting(){
                 call.respond(HttpStatusCode.OK)
             }
 
-            post("/getHome"){
-                val request = call.receive<TokenDTO>()
-                val checkingTokenResult = authRepository.checkToken(request)
+            post("/switchDevicesActive") {
+                val request = call.receive<DeviceActiveRequest>()
+                val checkingTokenResult = authRepository.checkToken(request.token)
                 if(checkingTokenResult is Resource.Error){
                     call.respondText(text = checkingTokenResult.message!!)
                     return@post
                 }
+                deviceRepository.switchDevicesActive(login = request.token.login, id = request.id)
+                call.respond(HttpStatusCode.OK)
+            }
+
+            post("/getHome"){
+                val request = call.receive<TokenDTO>()
+                val checkingTokenResult = authRepository.checkToken(request)
+                if(checkingTokenResult is Resource.Error){
+                    call.respondText(text = checkingTokenResult.message!!, status = HttpStatusCode.BadRequest)
+                    return@post
+                }
+                println(DevicesResponse(deviceRepository.fetchHomeDevices(request.login)).toString() + "   ##########")
                 call.respond(DevicesResponse(deviceRepository.fetchHomeDevices(request.login)))
 
+            }
+
+            get("/icon"){
+                val filename = call.parameters["name"]!!
+                val file = File("iconsSrc/$filename.png")
+                call.respondFile(file)
             }
 
         }

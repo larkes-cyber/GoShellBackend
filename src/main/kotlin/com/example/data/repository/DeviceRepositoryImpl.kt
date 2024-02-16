@@ -50,6 +50,23 @@ class DeviceRepositoryImpl(
         deviceDatabaseDataSource.replaceRoomDevice(roomDevice)
     }
 
+    override suspend fun switchDevicesActive(login:String, id: String) {
+        var flag = false
+        val devices = deviceDatabaseDataSource.fetchUserDevices(login).filter {
+            it.typeId == id
+        }
+
+        devices.forEach {device ->
+            flag = device.active
+        }
+
+        devices.forEach {device ->
+            device.active = !flag
+            deviceDatabaseDataSource.replaceRoomDevice(device)
+        }
+
+    }
+
     override suspend fun fetchHomeDevices(login:String): List<HomeDevicesDTO> {
         val roomDevices = deviceDatabaseDataSource.fetchHomeDevices(login)
         val typeDevices = mutableMapOf<String,MutableList<RoomDeviceEntity>>()

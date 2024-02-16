@@ -9,5 +9,6 @@ interface DeviceDatabaseDataSource {
     suspend fun fetchRoomDevice(id:String):RoomDeviceEntity?
     suspend fun fetchHomeDevices(login:String):List<RoomDeviceEntity>
     suspend fun replaceRoomDevice(roomDeviceEntity: RoomDeviceEntity)
+    suspend fun fetchUserDevices(login:String):List<RoomDeviceEntity>
 
 }

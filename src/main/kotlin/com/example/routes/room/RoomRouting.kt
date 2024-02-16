@@ -14,6 +14,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
+import java.util.UUID
 
 fun Application.configureRoomRouting(){
 
@@ -31,12 +32,14 @@ fun Application.configureRoomRouting(){
                     call.respondText(text = checkingTokenResult.message!!)
                     return@post
                 }
+                val uniqId = UUID.randomUUID().toString()
                 roomRepository.createRoom(RoomDTO(
+                    id = uniqId,
                     name = request.name,
                     image = request.image,
                     login = request.token.login
                 ))
-                call.respond(HttpStatusCode.OK)
+                call.respondText(status = HttpStatusCode.OK, text = uniqId)
             }
 
             post("/get") {

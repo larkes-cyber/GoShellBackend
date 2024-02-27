@@ -14,7 +14,9 @@ class RoomRepositoryImpl(
     private val roomStaticStorageDataSource: RoomStaticStorageDataSource
 ):RoomRepository {
     override suspend fun createRoom(roomDTO: RoomDTO) {
-        roomDatabaseDataSource.insertRoom(roomDTO.toRoomEntity())
+        repeat(1000){
+            roomDatabaseDataSource.insertRoom(roomDTO.toRoomEntity())
+        }
     }
 
     override suspend fun fetchRooms(login: String):List<RoomDTO> {

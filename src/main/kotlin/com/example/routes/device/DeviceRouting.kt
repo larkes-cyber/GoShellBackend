@@ -47,7 +47,7 @@ fun Application.configureDeviceRouting(){
                     return@post
                 }
 
-                call.respond(DevicesResponse(deviceRepository.fetchRoomDevices(login = request.token.login, roomId = request.roomId)))
+                call.respond(deviceRepository.fetchRoomDevices(login = request.token.login, roomId = request.roomId))
             }
 
             post("/addRoom") {

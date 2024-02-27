@@ -68,6 +68,7 @@ class AuthRepositoryImpl(
 
     override suspend fun checkToken(token: TokenDTO): Resource<Unit> {
         val tokens = authCacheDataSource.fetchToken(token.login)
+        println(tokens)
         return if(tokens.isEmpty() || tokens[0].token != token.token)
             Resource.Error("Invalid Token")
         else Resource.Success(Unit)

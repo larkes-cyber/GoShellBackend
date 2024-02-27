@@ -44,18 +44,30 @@ fun Application.configureRoomRouting(){
 
             post("/get") {
                 val request = call.receive<TokenDTO>()
+                val fromQ = call.parameters["from"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                val toQ = call.parameters["to"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
                 val checkingTokenResult = authRepository.checkToken(request)
                 if(checkingTokenResult is Resource.Error){
                     call.respondText(text = checkingTokenResult.message!!)
                     return@post
                 }
-                call.respond(RoomResponse(roomRepository.fetchRooms(request.login)))
+                val rooms = roomRepository.fetchRooms(request.login)
+
+                val leftSlice = fromQ
+                val rightSlice = if(toQ >= rooms.size) rooms.size - 1 else toQ
+
+                if(leftSlice >= rooms.size){
+                    call.respond(RoomResponse(emptyList<RoomDTO>()))
+                    return@post
+                }
+                call.respond(RoomResponse(rooms.asReversed().subList(leftSlice, rightSlice + 1)))
             }
 
             post("/getPhotos") {
                 val request = call.receive<TokenDTO>()
                 val checkingTokenResult = authRepository.checkToken(request)
                 if(checkingTokenResult is Resource.Error){
+                    println("Aefsdvdsvxcvsadd")
                     call.respondText(text = checkingTokenResult.message!!)
                     return@post
                 }

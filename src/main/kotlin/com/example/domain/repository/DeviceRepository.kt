@@ -7,7 +7,7 @@ import com.example.domain.model.TokenDTO
 
 interface DeviceRepository {
 
-    suspend fun insertRoomDevice(roomDeviceDTO: RoomDeviceDTO)
+    suspend fun insertRoomDevice(roomDeviceDTO: RoomDeviceDTO):String
     suspend fun fetchDevices():List<DeviceDTO>
     suspend fun fetchRoomDevices(roomId:String, login:String):List<RoomDeviceDTO>
     suspend fun switchDeviceActive(id:String)

@@ -9,17 +9,21 @@ import com.example.domain.model.DeviceDTO
 import com.example.domain.model.HomeDevicesDTO
 import com.example.domain.model.RoomDeviceDTO
 import com.example.domain.repository.DeviceRepository
+import java.util.*
 
 class DeviceRepositoryImpl(
     private val deviceDatabaseDataSource: DeviceDatabaseDataSource,
     private val deviceStaticStorageDataSource: DeviceStaticStorageDataSource
 ):DeviceRepository {
-    override suspend fun insertRoomDevice(roomDeviceDTO: RoomDeviceDTO) {
+    override suspend fun insertRoomDevice(roomDeviceDTO: RoomDeviceDTO):String {
         if(roomDeviceDTO.name == null){
             val device = deviceStaticStorageDataSource.fetchDevice(roomDeviceDTO.typeId)
             roomDeviceDTO.name = device.name
         }
+        val primaryId = UUID.randomUUID().toString()
+        roomDeviceDTO.id = primaryId
         deviceDatabaseDataSource.insertRoomDevice(roomDeviceDTO.toRoomDeviceEntity())
+        return primaryId
     }
 
     override suspend fun fetchDevices(): List<DeviceDTO> {
@@ -71,6 +75,7 @@ class DeviceRepositoryImpl(
         val roomDevices = deviceDatabaseDataSource.fetchHomeDevices(login)
         val typeDevices = mutableMapOf<String,MutableList<RoomDeviceEntity>>()
         val homeDevices = mutableListOf<HomeDevicesDTO>()
+        val devices = deviceStaticStorageDataSource.fetchDevices()
 
         roomDevices.forEach {
             val tmp = typeDevices[it.typeId] ?: mutableListOf()
@@ -90,7 +95,8 @@ class DeviceRepositoryImpl(
                 typeId = pair.key,
                 name = name,
                 active = active,
-                inactive = inactive
+                inactive = inactive,
+                icon = devices.find { it.id == pair.key }?.icon ?: ""
             ))
         }
 

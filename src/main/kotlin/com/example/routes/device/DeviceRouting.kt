@@ -57,13 +57,13 @@ fun Application.configureDeviceRouting(){
                     call.respondText(text = checkingTokenResult.message!!)
                     return@post
                 }
-                deviceRepository.insertRoomDevice(RoomDeviceDTO(
+                val id = deviceRepository.insertRoomDevice(RoomDeviceDTO(
                     name = request.name,
                     login = request.token.login,
                     roomId = request.roomId,
                     typeId = request.typeId
                 ))
-                call.respond(HttpStatusCode.OK)
+                call.respond(id)
             }
 
             post("/switchActive") {

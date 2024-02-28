@@ -5,7 +5,7 @@ import java.util.UUID
 
 @Serializable
 data class RoomDeviceDTO(
-    val id:String? = null,
+    var id:String? = null,
     val typeId:String,
     val roomId:String,
     val login:String,

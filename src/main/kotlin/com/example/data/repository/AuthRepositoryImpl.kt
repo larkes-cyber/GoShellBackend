@@ -8,62 +8,64 @@ import com.example.domain.model.ProfileDTO
 import com.example.domain.model.TokenDTO
 import com.example.domain.repository.AuthRepository
 import com.example.domain.repository.ProfileRepository
+import com.example.security.token.JwtTokenService
+import com.example.security.token.TokenClaim
+import com.example.security.token.TokenConfigFactory
 import com.example.utils.Resource
+import java.util.*
 
 class AuthRepositoryImpl(
     private val authCacheDataSource: AuthCacheDataSource,
     private val profileRepository: ProfileRepository
 ):AuthRepository {
-    private suspend fun pumpTokens(){
-        profileRepository
-            .fetchProfiles()
-            .forEach {
-                val token = AuthRepository.generateToken(password = it.password, login = it.login)
-                authCacheDataSource.cacheToken(
-                    TokenEntity(
-                    token = token,
-                    login = it.login
-                  )
-                )
-            }
-    }
 
     override suspend fun performLogin(login: String, password: String): Resource<TokenDTO> {
-        if(authCacheDataSource.fetchTokens().isEmpty()) pumpTokens()
         println(authCacheDataSource.fetchTokens() + "  #############")
-        val tokens = authCacheDataSource.fetchToken(login)
         val passCrypt = AuthRepository.generatePasswordHash(password)
-        if(tokens.isEmpty()) return Resource.Error("User doesn't exist")
+        val user = profileRepository.fetchProfile(login)
 
-        val token = tokens[0].toTokenDTO()
-        if(AuthRepository.generateToken(login = login, password = passCrypt) == token.token) return Resource.Success(token)
+        if(user.password != passCrypt) return Resource.Error("Wrong pass")
 
-        return Resource.Error("Incorrect password")
+        val token = JwtTokenService.generate(
+            config = TokenConfigFactory.make(),
+            TokenClaim(
+                name = "userId",
+                value = user.id
+            )
+        )
+
+        val userToken = TokenEntity(
+            token = token,
+            login = login
+        )
+
+
+        return Resource.Success(userToken.toTokenDTO())
+
     }
 
-    override suspend fun performRegistration(profileDTO:ProfileDTO): Resource<TokenDTO> {
+    override suspend fun performRegistration(profileDTO:ProfileDTO):Resource<String> {
 
-        if(profileDTO.login.isEmpty() || profileDTO.password.isEmpty() || profileDTO.name.isEmpty()) return Resource.Error("Empty fields")
-        val tokens = authCacheDataSource.fetchToken(profileDTO.login)
-        if(tokens.isNotEmpty()) return Resource.Error("User is already exists")
+        if(profileDTO.login.isEmpty() || profileDTO.password.isEmpty() || profileDTO.name.isEmpty()) return Resource.Error("field empty")
 
         val passCrypt = AuthRepository.generatePasswordHash(profileDTO.password)
         profileDTO.password = passCrypt
 
-        val token = AuthRepository.generateToken(
-            login = profileDTO.login,
-            password = passCrypt
-        )
-        val userToken = TokenEntity(
-            token = token,
-            login = profileDTO.login
+        val userId = UUID.randomUUID().toString()
+
+
+        val token = JwtTokenService.generate(
+            config = TokenConfigFactory.make(),
+            TokenClaim(
+                name = "userId",
+                value = userId
+            )
         )
 
-        authCacheDataSource.cacheToken(userToken)
+        profileDTO.id = userId
         profileRepository.createProfile(profileDTO)
 
-        return Resource.Success(userToken.toTokenDTO())
-
+        return Resource.Success(token)
     }
 
     override suspend fun checkToken(token: TokenDTO): Resource<Unit> {

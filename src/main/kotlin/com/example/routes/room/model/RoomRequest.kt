@@ -6,10 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RoomRequest(
-    @SerialName("token")
-    val token:TokenDTO,
-    @SerialName("name")
     val name:String,
-    @SerialName("image")
-    val image:String
+    val image:String,
+    val login:String
 )

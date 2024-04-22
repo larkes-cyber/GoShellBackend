@@ -6,6 +6,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProfileRequest(
-    val token:TokenDTO,
     val profile:ProfileDTO
 )

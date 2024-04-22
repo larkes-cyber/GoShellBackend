@@ -5,7 +5,7 @@ import java.util.UUID
 
 @Serializable
 data class ProfileDTO(
-    val id:String = UUID.randomUUID().toString(),
+    var id:String = UUID.randomUUID().toString(),
     val name:String,
     val login:String,
     var password:String

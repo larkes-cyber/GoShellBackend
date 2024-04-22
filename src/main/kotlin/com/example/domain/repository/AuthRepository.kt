@@ -15,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec
 interface AuthRepository {
 
     suspend fun performLogin(login:String, password:String):Resource<TokenDTO>
-    suspend fun performRegistration(profileDTO: ProfileDTO):Resource<TokenDTO>
+    suspend fun performRegistration(profileDTO: ProfileDTO):Resource<String>
     suspend fun checkToken(token:TokenDTO):Resource<Unit>
 
     companion object{

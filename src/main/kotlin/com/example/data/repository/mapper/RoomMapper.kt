@@ -7,7 +7,7 @@ import java.util.UUID
 fun RoomDTO.toRoomEntity():RoomEntity{
     return RoomEntity(
         id = id ?: UUID.randomUUID().toString(),
-        login = login,
+        userId = userId,
         name = name,
         image = image
     )
@@ -16,7 +16,7 @@ fun RoomDTO.toRoomEntity():RoomEntity{
 fun RoomEntity.toRoomDTO():RoomDTO{
     return RoomDTO(
         id = id,
-        login = login,
+        userId = userId,
         name = name,
         image = image
     )

@@ -13,7 +13,7 @@ fun RoomDeviceDTO.toRoomDeviceEntity():RoomDeviceEntity{
         roomId = roomId,
         active = active,
         name = name!!,
-        login = login
+        userId = userId
     )
 }
 

@@ -14,7 +14,7 @@ class ProfileRepositoryImpl(
         profileDatabaseDataSource.createProfile(profileDTO.toProfileEntity())
     }
 
-    override suspend fun fetchProfile(login:String) = profileDatabaseDataSource.fetchProfile(login).toProfileDTO()
+    override suspend fun fetchProfile(userId:String) = profileDatabaseDataSource.fetchProfile(userId).toProfileDTO()
     override suspend fun fetchProfiles(): List<ProfileDTO> {
         return profileDatabaseDataSource.fetchProfiles().map { it.toProfileDTO() }
     }

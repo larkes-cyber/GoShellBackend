@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetRoomDevicesRequest(
-    val roomId:String,
-    val login:String
+    val roomId:String
 )

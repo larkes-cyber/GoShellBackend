@@ -12,6 +12,7 @@ import com.example.utils.Resource
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -30,20 +31,25 @@ fun Application.configureRoomRouting(){
                 post("/add") {
                     val request = call.receive<RoomRequest>()
                     val uniqId = UUID.randomUUID().toString()
+
+                    val principal = call.principal<JWTPrincipal>()
+                    val userId = principal!!.payload.getClaim("userId").asString()
+
                     roomRepository.createRoom(RoomDTO(
                         id = uniqId,
                         name = request.name,
                         image = request.image,
-                        login = request.login
+                        userId = userId
                     ))
                     call.respondText(status = HttpStatusCode.OK, text = uniqId)
                 }
 
                 post("/get") {
-                    val request = call.receive<GetRoomsRequest>()
                     val fromQ = call.parameters["from"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
                     val toQ = call.parameters["to"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
-                    val rooms = roomRepository.fetchRooms(request.login)
+                    val principal = call.principal<JWTPrincipal>()
+                    val userId = principal!!.payload.getClaim("userId").asString()
+                    val rooms = roomRepository.fetchRooms(userId)
                     val leftSlice = fromQ
                     val rightSlice = if(toQ >= rooms.size) rooms.size - 1 else toQ
 

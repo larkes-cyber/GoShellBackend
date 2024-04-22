@@ -19,8 +19,8 @@ class RoomRepositoryImpl(
         }
     }
 
-    override suspend fun fetchRooms(login: String):List<RoomDTO> {
-        return roomDatabaseDataSource.fetchRooms(login).map { it.toRoomDTO() }
+    override suspend fun fetchRooms(userId: String):List<RoomDTO> {
+        return roomDatabaseDataSource.fetchRooms(userId).map { it.toRoomDTO() }
     }
 
     override suspend fun fetchRoomPhotos(): List<String> {

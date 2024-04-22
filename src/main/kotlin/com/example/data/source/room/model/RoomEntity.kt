@@ -4,5 +4,5 @@ data class RoomEntity(
     val id:String,
     val image:String,
     val name:String,
-    val login:String
+    val userId:String
 )

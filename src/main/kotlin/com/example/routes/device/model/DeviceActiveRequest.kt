@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeviceActiveRequest(
-    val id:String,
-    val login:String
+    val id:String
 )

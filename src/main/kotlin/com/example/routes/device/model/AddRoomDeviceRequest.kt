@@ -8,5 +8,5 @@ data class AddRoomDeviceRequest(
     val typeId:String,
     val roomId:String,
     var name:String? = null,
-    val login:String
+    val id:String
 )

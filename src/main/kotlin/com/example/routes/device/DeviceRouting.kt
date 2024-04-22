@@ -9,6 +9,7 @@ import com.example.utils.Resource
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -31,14 +32,22 @@ fun Application.configureDeviceRouting(){
 
                 post("/getRoom") {
                     val request = call.receive<GetRoomDevicesRequest>()
-                    call.respond(deviceRepository.fetchRoomDevices(login = request.login, roomId = request.roomId))
+
+                    val principal = call.principal<JWTPrincipal>()
+                    val userId = principal!!.payload.getClaim("userId").asString()
+
+                    call.respond(deviceRepository.fetchRoomDevices(userId = userId, roomId = request.roomId))
                 }
 
                 post("/addRoom") {
                     val request = call.receive<AddRoomDeviceRequest>()
+
+                    val principal = call.principal<JWTPrincipal>()
+                    val userId = principal!!.payload.getClaim("userId").asString()
+
                     deviceRepository.insertRoomDevice(RoomDeviceDTO(
                         name = request.name,
-                        login = request.login,
+                        userId = userId,
                         roomId = request.roomId,
                         typeId = request.typeId
                     ))
@@ -53,14 +62,16 @@ fun Application.configureDeviceRouting(){
 
                 post("/switchDevicesActive") {
                     val request = call.receive<DeviceActiveRequest>()
-                    deviceRepository.switchDevicesActive(login = request.login, id = request.id)
+                    val principal = call.principal<JWTPrincipal>()
+                    val userId = principal!!.payload.getClaim("userId").asString()
+                    deviceRepository.switchDevicesActive(userId = userId, id = request.id)
                     call.respond(HttpStatusCode.OK)
                 }
 
                 post("/getHome"){
-                    val request = call.receive<HomeRequest>()
-                    println(DevicesResponse(deviceRepository.fetchHomeDevices(request.login)).toString() + "   ##########")
-                    call.respond(DevicesResponse(deviceRepository.fetchHomeDevices(request.login)))
+                    val principal = call.principal<JWTPrincipal>()
+                    val userId = principal!!.payload.getClaim("userId").asString()
+                    call.respond(DevicesResponse(deviceRepository.fetchHomeDevices(userId)))
 
                 }
 

@@ -14,9 +14,9 @@ class ProfileDatabaseDataSourceImpl(
         db.insertOne(profileEntity)
     }
 
-    override suspend fun fetchProfile(login:String): ProfileEntity {
+    override suspend fun fetchProfile(id:String): ProfileEntity {
 
-        val filter = Filters.eq("login", login)
+        val filter = Filters.eq("id", id)
         return db.findOne(filter)!!
 
     }
@@ -26,7 +26,7 @@ class ProfileDatabaseDataSourceImpl(
     }
 
     override suspend fun replaceProfile(profileEntity: ProfileEntity){
-        val filter = Filters.eq("login", profileEntity.login)
+        val filter = Filters.eq("id", profileEntity.id)
         val profile = db.findOne(filter)
         db.deleteOne(filter)
         profile!!.name = profileEntity.name

@@ -9,9 +9,9 @@ interface DeviceRepository {
 
     suspend fun insertRoomDevice(roomDeviceDTO: RoomDeviceDTO)
     suspend fun fetchDevices():List<DeviceDTO>
-    suspend fun fetchRoomDevices(roomId:String, login:String):List<RoomDeviceDTO>
+    suspend fun fetchRoomDevices(roomId:String, userId:String):List<RoomDeviceDTO>
     suspend fun switchDeviceActive(id:String)
-    suspend fun switchDevicesActive(login:String, id:String)
-    suspend fun fetchHomeDevices(login:String):List<HomeDevicesDTO>
+    suspend fun switchDevicesActive(userId:String, id:String)
+    suspend fun fetchHomeDevices(userId:String):List<HomeDevicesDTO>
 
 }

@@ -16,7 +16,7 @@ class DeviceDatabaseDataSourceImpl(
 
     override suspend fun fetchRoomDevices(roomId:String, login:String):List<RoomDeviceEntity>{
         val filter1 = Filters.eq("roomId", roomId)
-        val filter2 = Filters.eq("login", login)
+        val filter2 = Filters.eq("id", login)
         return db.find(filter1, filter2).toList()
     }
 
@@ -25,8 +25,8 @@ class DeviceDatabaseDataSourceImpl(
         return db.findOne(filter)
     }
 
-    override suspend fun fetchHomeDevices(login:String):List<RoomDeviceEntity>{
-        val filter = Filters.eq("login", login)
+    override suspend fun fetchHomeDevices(id:String):List<RoomDeviceEntity>{
+        val filter = Filters.eq("id", id)
         return db.find(filter).toList()
     }
 
@@ -36,8 +36,8 @@ class DeviceDatabaseDataSourceImpl(
         db.insertOne(roomDeviceEntity)
     }
 
-    override suspend fun fetchUserDevices(login: String): List<RoomDeviceEntity> {
-        val filter = Filters.eq("login", login)
+    override suspend fun fetchUserDevices(id: String): List<RoomDeviceEntity> {
+        val filter = Filters.eq("id", id)
         return db.find(filter).toList()
     }
 

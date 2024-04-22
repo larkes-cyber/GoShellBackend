@@ -26,10 +26,10 @@ class DeviceRepositoryImpl(
         return deviceStaticStorageDataSource.fetchDevices().map { it.toDeviceDTO() }
     }
 
-    override suspend fun fetchRoomDevices(roomId: String, login:String): List<RoomDeviceDTO> {
+    override suspend fun fetchRoomDevices(roomId: String, userId:String): List<RoomDeviceDTO> {
         return deviceDatabaseDataSource.fetchRoomDevices(
             roomId = roomId,
-            login = login
+            userId = userId
         ).map {
             val device = deviceStaticStorageDataSource.fetchDevice(it.typeId)
             RoomDeviceDTO(
@@ -39,7 +39,7 @@ class DeviceRepositoryImpl(
                 active = it.active,
                 icon = device.icon,
                 name = it.name,
-                login = it.login
+                userId = it.userId
             )
         }
     }
@@ -50,9 +50,9 @@ class DeviceRepositoryImpl(
         deviceDatabaseDataSource.replaceRoomDevice(roomDevice)
     }
 
-    override suspend fun switchDevicesActive(login:String, id: String) {
+    override suspend fun switchDevicesActive(userId:String, id: String) {
         var flag = false
-        val devices = deviceDatabaseDataSource.fetchUserDevices(login).filter {
+        val devices = deviceDatabaseDataSource.fetchUserDevices(userId).filter {
             it.typeId == id
         }
 
@@ -67,8 +67,8 @@ class DeviceRepositoryImpl(
 
     }
 
-    override suspend fun fetchHomeDevices(login:String): List<HomeDevicesDTO> {
-        val roomDevices = deviceDatabaseDataSource.fetchHomeDevices(login)
+    override suspend fun fetchHomeDevices(userId:String): List<HomeDevicesDTO> {
+        val roomDevices = deviceDatabaseDataSource.fetchHomeDevices(userId)
         val typeDevices = mutableMapOf<String,MutableList<RoomDeviceEntity>>()
         val homeDevices = mutableListOf<HomeDevicesDTO>()
 

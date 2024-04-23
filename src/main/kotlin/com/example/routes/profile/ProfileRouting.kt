@@ -29,7 +29,7 @@ fun Application.configureProfileRouting(){
                 post("/get") {
                     val principal = call.principal<JWTPrincipal>()
                     val userId = principal!!.payload.getClaim("userId").asString()
-                    call.respond(profileRepository.fetchProfile(userId))
+                    call.respond(profileRepository.fetchProfile(userId)!!)
                 }
 
                 post("/edit") {

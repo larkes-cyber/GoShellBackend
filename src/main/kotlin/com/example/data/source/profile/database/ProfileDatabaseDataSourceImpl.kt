@@ -14,10 +14,10 @@ class ProfileDatabaseDataSourceImpl(
         db.insertOne(profileEntity)
     }
 
-    override suspend fun fetchProfile(id:String): ProfileEntity {
+    override suspend fun fetchProfile(login:String?, id:String?): ProfileEntity? {
 
-        val filter = Filters.eq("id", id)
-        return db.findOne(filter)!!
+        val filter = if(login == null) Filters.eq("id", id) else  Filters.eq("login", login)
+        return db.findOne(filter)
 
     }
 

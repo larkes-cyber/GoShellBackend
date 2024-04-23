@@ -22,7 +22,7 @@ class AuthRepositoryImpl(
     override suspend fun performLogin(login: String, password: String): Resource<TokenDTO> {
         println(authCacheDataSource.fetchTokens() + "  #############")
         val passCrypt = AuthRepository.generatePasswordHash(password)
-        val user = profileRepository.fetchProfile(login)
+        val user = profileRepository.fetchProfile(login = login) ?: return Resource.Error("invalid user")
 
         if(user.password != passCrypt) return Resource.Error("Wrong pass")
 

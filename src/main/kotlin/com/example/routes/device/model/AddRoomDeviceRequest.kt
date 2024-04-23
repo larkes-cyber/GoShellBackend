@@ -7,6 +7,5 @@ import kotlinx.serialization.Serializable
 data class AddRoomDeviceRequest(
     val typeId:String,
     val roomId:String,
-    var name:String? = null,
-    val id:String
+    var name:String? = null
 )

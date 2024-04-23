@@ -4,6 +4,7 @@ import com.example.domain.model.ProfileDTO
 import com.example.domain.repository.AuthRepository
 import com.example.routes.auth.model.AuthRequest
 import com.example.routes.auth.model.RegRequest
+import com.example.routes.auth.model.TokenResponse
 import com.example.utils.Resource
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -23,7 +24,7 @@ fun Application.configureAuthRouting(){
 
                 val token = authRepository.performLogin(login = request.login, password = request.password)
                 if(token is Resource.Success){
-                    call.respond(token.data!!)
+                    call.respond(TokenResponse(token.data!!.token))
                     return@post
                 }
                 call.respondText(text = token.message!!, status = HttpStatusCode.NotFound)

@@ -6,7 +6,7 @@ import com.example.domain.model.DeviceDTO
 import com.example.domain.model.RoomDeviceDTO
 import java.util.UUID
 
-fun RoomDeviceDTO.toRoomDeviceEntity():RoomDeviceEntity{
+fun RoomDeviceDTO.toRoomDeviceEntity(userId:String):RoomDeviceEntity{
     return RoomDeviceEntity(
         id = id ?: UUID.randomUUID().toString(),
         typeId = typeId,

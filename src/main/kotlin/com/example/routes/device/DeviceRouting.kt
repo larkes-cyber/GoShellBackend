@@ -45,9 +45,8 @@ fun Application.configureDeviceRouting(){
                     val principal = call.principal<JWTPrincipal>()
                     val userId = principal!!.payload.getClaim("userId").asString()
 
-                    deviceRepository.insertRoomDevice(RoomDeviceDTO(
+                    deviceRepository.insertRoomDevice(userId, RoomDeviceDTO(
                         name = request.name,
-                        userId = userId,
                         roomId = request.roomId,
                         typeId = request.typeId
                     ))

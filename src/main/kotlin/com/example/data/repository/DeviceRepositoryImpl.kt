@@ -14,12 +14,12 @@ class DeviceRepositoryImpl(
     private val deviceDatabaseDataSource: DeviceDatabaseDataSource,
     private val deviceStaticStorageDataSource: DeviceStaticStorageDataSource
 ):DeviceRepository {
-    override suspend fun insertRoomDevice(roomDeviceDTO: RoomDeviceDTO) {
+    override suspend fun insertRoomDevice(userId: String, roomDeviceDTO: RoomDeviceDTO) {
         if(roomDeviceDTO.name == null){
             val device = deviceStaticStorageDataSource.fetchDevice(roomDeviceDTO.typeId)
             roomDeviceDTO.name = device.name
         }
-        deviceDatabaseDataSource.insertRoomDevice(roomDeviceDTO.toRoomDeviceEntity())
+        deviceDatabaseDataSource.insertRoomDevice(roomDeviceDTO.toRoomDeviceEntity(userId))
     }
 
     override suspend fun fetchDevices(): List<DeviceDTO> {
@@ -38,8 +38,7 @@ class DeviceRepositoryImpl(
                 roomId = it.roomId,
                 active = it.active,
                 icon = device.icon,
-                name = it.name,
-                userId = it.userId
+                name = it.name
             )
         }
     }
@@ -79,7 +78,7 @@ class DeviceRepositoryImpl(
         }
 
         typeDevices.forEach {pair ->
-            val name = deviceStaticStorageDataSource.fetchDevice(pair.key).name
+            val device = deviceStaticStorageDataSource.fetchDevice(pair.key)
             var active = 0
             var inactive = 0
             pair.value.forEach {device ->
@@ -88,9 +87,10 @@ class DeviceRepositoryImpl(
             }
             homeDevices.add(HomeDevicesDTO(
                 typeId = pair.key,
-                name = name,
+                name = device.name,
                 active = active,
-                inactive = inactive
+                inactive = inactive,
+                icon = device.icon
             ))
         }
 

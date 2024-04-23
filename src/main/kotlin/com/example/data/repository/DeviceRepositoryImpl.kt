@@ -19,6 +19,7 @@ class DeviceRepositoryImpl(
             val device = deviceStaticStorageDataSource.fetchDevice(roomDeviceDTO.typeId)
             roomDeviceDTO.name = device.name
         }
+        println(roomDeviceDTO.roomId + " dsfsdfsdffff")
         deviceDatabaseDataSource.insertRoomDevice(roomDeviceDTO.toRoomDeviceEntity(userId))
     }
 

@@ -15,6 +15,7 @@ class DeviceDatabaseDataSourceImpl(
     }
 
     override suspend fun fetchRoomDevices(roomId:String, userId:String):List<RoomDeviceEntity>{
+        println(userId + " sdfsdfsdfsdf")
         val filter1 = Filters.eq("roomId", roomId)
         val filter2 = Filters.eq("userId", userId)
         println("${ db.find(filter1, filter2).toList()}  vcsdsdfffsdd")

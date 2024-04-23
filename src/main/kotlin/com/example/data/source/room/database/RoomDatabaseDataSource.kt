@@ -5,6 +5,6 @@ import com.example.data.source.room.model.RoomEntity
 interface RoomDatabaseDataSource {
 
     suspend fun insertRoom(roomEntity: RoomEntity)
-    suspend fun fetchRooms(login:String):List<RoomEntity>
+    suspend fun fetchRooms(userId:String):List<RoomEntity>
 
 }

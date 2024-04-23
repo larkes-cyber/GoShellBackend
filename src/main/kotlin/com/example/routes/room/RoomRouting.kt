@@ -1,14 +1,10 @@
 package com.example.routes.room
 
 import com.example.domain.model.RoomDTO
-import com.example.domain.model.TokenDTO
-import com.example.domain.repository.AuthRepository
-import com.example.domain.repository.DeviceRepository
 import com.example.domain.repository.RoomRepository
-import com.example.routes.room.model.GetRoomsRequest
 import com.example.routes.room.model.RoomRequest
 import com.example.routes.room.model.RoomResponse
-import com.example.utils.Resource
+import com.example.routes.room.model.RoomsResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -30,10 +26,11 @@ fun Application.configureRoomRouting(){
             authenticate {
                 post("/add") {
                     val request = call.receive<RoomRequest>()
-                    val uniqId = UUID.randomUUID().toString()
 
                     val principal = call.principal<JWTPrincipal>()
                     val userId = principal!!.payload.getClaim("userId").asString()
+
+                    val uniqId = UUID.randomUUID().toString()
 
                     roomRepository.createRoom(RoomDTO(
                         id = uniqId,
@@ -41,27 +38,29 @@ fun Application.configureRoomRouting(){
                         image = request.image,
                         userId = userId
                     ))
-                    call.respondText(status = HttpStatusCode.OK, text = uniqId)
+
+                    call.respondText(uniqId, status = HttpStatusCode.OK)
                 }
 
                 post("/get") {
-                    val fromQ = call.parameters["from"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
-                    val toQ = call.parameters["to"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                    val count = call.parameters["count"]?.toInt() ?: return@post call.respond(HttpStatusCode.BadRequest)
                     val principal = call.principal<JWTPrincipal>()
                     val userId = principal!!.payload.getClaim("userId").asString()
-                    val rooms = roomRepository.fetchRooms(userId)
-                    val leftSlice = fromQ
-                    val rightSlice = if(toQ >= rooms.size) rooms.size - 1 else toQ
-
-                    if(leftSlice >= rooms.size){
-                        call.respond(RoomResponse(emptyList<RoomDTO>()))
+                    val rooms = roomRepository.fetchRooms(userId).map { RoomResponse(
+                        id = it.id,
+                        image = it.image,
+                        name = it.name
+                    ) }
+                    println(rooms + " dfgdfgdfgdg")
+                    if(count > rooms.size) {
+                        call.respond(RoomsResponse(rooms.asReversed()))
                         return@post
                     }
-                    call.respond(RoomResponse(rooms.asReversed().subList(leftSlice, rightSlice + 1)))
+                    call.respond(RoomsResponse(rooms.asReversed().subList(0,count)))
                 }
 
                 post("/getPhotos") {
-                    call.respond(RoomResponse(roomRepository.fetchRoomPhotos()))
+                    call.respond(RoomsResponse(roomRepository.fetchRoomPhotos()))
                 }
             }
 

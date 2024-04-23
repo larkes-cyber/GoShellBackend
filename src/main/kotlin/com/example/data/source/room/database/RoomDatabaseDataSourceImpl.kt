@@ -14,8 +14,8 @@ class RoomDatabaseDataSourceImpl(
         db.insertOne(roomEntity)
     }
 
-    override suspend fun fetchRooms(login:String):List<RoomEntity>{
-        val filter = Filters.eq("login", login)
+    override suspend fun fetchRooms(userId:String):List<RoomEntity>{
+        val filter = Filters.eq("userId", userId)
         return db.find(filter).toList()
     }
 
